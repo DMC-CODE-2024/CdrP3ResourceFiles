@@ -29,6 +29,7 @@ if [ -e ${process_name}.jar ]
      for ((k=1; k<=$fileCount; k++))
        do
         logpath=${LOG_HOME}/$module_name/$main_module/${process_name}/${oprName}/${counter}/
+        mkdir -p $logpath
 
         inputfilepath=${DATA_HOME}/$module_name/$main_module/${process_name}_input/${oprName}/${counter}/process/
 
