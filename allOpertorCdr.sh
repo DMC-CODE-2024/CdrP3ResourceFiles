@@ -1,13 +1,12 @@
 #!/bin/bash
 
-#set -x
-
 source $commonConfigurationFilePath > /dev/null
 main_module="etl_cdr"
 module_name="etl_module"
 process_name="etl_cdr_p3"
 sql_process_name="etl_cdr_sql"
 log_level="INFO" # INFO, DEBUG, ERROR
+rule_engine="${APP_HOME}/rule_engine/RuleEngine-1.1.jar"
 
 
 startProcess(){
@@ -33,7 +32,8 @@ if [ -e ${process_name}.jar ]
 
         inputfilepath=${DATA_HOME}/$module_name/$main_module/${process_name}_input/${oprName}/${counter}/process/
 
-        java -Dlog_path=${logpath} -Dlog_level=${log_level} -Dmodule_name=${process_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:./application.properties,file:${commonConfigurationFilePath} -jar ${process_name}.jar ${inputfilepath}
+         java -Dlog_path=${logpath} -Dlog_level=${log_level} -Dmodule_name=${process_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:${commonConfigurationFilePath},file:./application.properties  -Dloader.path=${rule_engine} -cp ${process_name}.jar org.springframework.boot.loader.PropertiesLauncher ${inputfilepath} 1>/dev/null 2>${logpath}/${module_name}.error & 
+      #  java -Dlog_path=${logpath} -Dlog_level=${log_level} -Dmodule_name=${process_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:./application.properties,file:${commonConfigurationFilePath}  -jar ${process_name}.jar ${inputfilepath}
        done
      sleep 5
 
