@@ -15,8 +15,6 @@ build="${module_name}.jar"
 
 cd ${build_path}
 
-source application.properties > /dev/null
-
 ### Start Sub-Procedure ###
 
 start_java_process()
@@ -39,19 +37,9 @@ start_java_process()
 
     mkdir $log_path -p
 
-    echo "testing sql input ==> ${sqlInputPath}/${op_name}/${counter} "
-    echo "testing p3 processed ==> ${p3ProcessedPath}/${op_name}/${counter}"
-
-    mkdir ${sqlInputPath}/${op_name}/${counter} -p
-    mkdir ${p3ProcessedPath}/${op_name}/${counter} -p
-
     cd ${build_path}
 
-#    java -Dlog.path=${log_path} -Dlog.level=${log_level} -Dmodule.name=${module_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:./application.properties,file:${commonConfigurationFilePath} -jar ${build} ${op_name} ${counter} 1>/dev/null 2>${log_path}/${module_name}_${counter}.error  
-
-
-    java -Dlog.path=${log_path} -Dlog.level=${log_level} -Dmodule.name=${module_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:./application.properties,file:${commonTest} -jar ${build} ${op_name} ${counter} 1>/dev/null 2>${log_path}/${module_name}_${counter}.error
-
+    java -Dlog.path=${log_path} -Dlog.level=${log_level} -Dmodule.name=${module_name}_${counter}  -Dlog4j.configurationFile=./log4j2.xml  -Dspring.config.location=file:./application.properties,file:${commonConfigurationFile} -jar ${build} ${op_name} ${counter} 1>/dev/null 2>${log_path}/${module_name}_${counter}.error  
 
     echo "$(date) ${module_name} [${op_name}]: P3 java process for ${op_name} [${counter}] is completed !!! "
     echo "$(date) ${module_name} [${op_name}]: ==> calling next sql process for ${op_name} [${counter}]... "
@@ -92,4 +80,3 @@ wait $!
 
 echo "$(date) ${module_name} [${op_name}]: ==> P3 process is completed !!! "
 echo "$(date) ${main_module}_sql [${op_name}]: ==> sql process is completed !!! "
-
